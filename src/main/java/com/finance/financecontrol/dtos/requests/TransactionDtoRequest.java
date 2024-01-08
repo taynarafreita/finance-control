@@ -9,13 +9,13 @@ import java.util.UUID;
 
 public class TransactionDtoRequest {
 
-    private String userId;
+    private UserDtoRequest userId;
 
     @NotNull(message = "is required")
     private String transactionDescription;
 
     @NotNull(message = "is required")
-    private String category;
+    private CategoryDtoRequest category;
 
     @NotNull(message = "is required")
     private ExpenseType expenseType;
@@ -29,7 +29,7 @@ public class TransactionDtoRequest {
 
     public TransactionDtoRequest() {}
 
-    public TransactionDtoRequest(String userId, String transactionDescription, String category, ExpenseType expenseType, LocalDateTime dueDate, BigDecimal amount, String comments) {
+    public TransactionDtoRequest(UserDtoRequest userId, String transactionDescription, CategoryDtoRequest category, ExpenseType expenseType, LocalDateTime dueDate, BigDecimal amount, String comments) {
         this.userId = userId;
         this.transactionDescription = transactionDescription;
         this.category = category;
@@ -39,11 +39,11 @@ public class TransactionDtoRequest {
         this.comments = comments;
     }
 
-    public String getUserId() {
+    public UserDtoRequest getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(UserDtoRequest userId) {
         this.userId = userId;
     }
 
@@ -55,11 +55,11 @@ public class TransactionDtoRequest {
         this.transactionDescription = transactionDescription;
     }
 
-    public String getCategory() {
+    public CategoryDtoRequest getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(CategoryDtoRequest category) {
         this.category = category;
     }
 

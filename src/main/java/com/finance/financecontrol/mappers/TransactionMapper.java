@@ -1,7 +1,11 @@
 package com.finance.financecontrol.mappers;
 
+import com.finance.financecontrol.dtos.requests.CategoryDtoRequest;
 import com.finance.financecontrol.dtos.requests.TransactionDtoRequest;
+import com.finance.financecontrol.dtos.requests.UserDtoRequest;
+import com.finance.financecontrol.dtos.responses.CategoryDtoResponse;
 import com.finance.financecontrol.dtos.responses.TransactionDtoResponse;
+import com.finance.financecontrol.dtos.responses.UserDtoResponse;
 import com.finance.financecontrol.models.Transaction;
 import com.finance.financecontrol.models.Category;
 
@@ -28,12 +32,12 @@ public class TransactionMapper {
         Transaction transaction = new Transaction();
         transaction.setId(UUID.randomUUID());
 
-        User user = mapStringToUser(dto.getUserId());
+        User user = mapDtoToUser(dto.getUserId());
         transaction.setUserId(user);
 
         transaction.setTransactionDescription(dto.getTransactionDescription());
 
-        Category category = mapStringToCategory(dto.getCategory());
+        Category category = mapDtoToCategory(dto.getCategory());
         transaction.setCategoryId(category);
 
         transaction.setExpenseType(dto.getExpenseType());
@@ -47,9 +51,9 @@ public class TransactionMapper {
     public TransactionDtoResponse toResponseDTO(Transaction transaction) {
         return new TransactionDtoResponse(
                 transaction.getId(),
-                mapUserIdToString(transaction.getUserId()),
+                mapUserIdToDto(transaction.getUserId()),
                 transaction.getTransactionDescription(),
-                mapCategoryIdToString(transaction.getCategoryId()),
+                mapCategoryIdToDto(transaction.getCategoryId()),
                 transaction.getExpenseType(),
                 transaction.getDueDate(),
                 transaction.getAmount(),
@@ -59,28 +63,36 @@ public class TransactionMapper {
         );
     }
 
-    private Category mapStringToCategory(String categoryId) {
-        if (categoryId != null) {
-            Long categoryIdLong = Long.parseLong(categoryId);
-            Category category = categoryRepository.findById(Math.toIntExact(categoryIdLong)).orElse(null);
+    private Category mapDtoToCategory(CategoryDtoRequest categoryDto) {
+        if (categoryDto != null) {
+            Long categoryId = categoryDto.getId();
+            Category category = categoryRepository.findById(Math.toIntExact(categoryId)).orElse(null);
+
             return category;
         }
         return null;
     }
 
-    private String mapCategoryIdToString(Category category) {
-        return (category != null) ? category.getId().toString() : null;
+    private CategoryDtoResponse mapCategoryIdToDto(Category category) {
+        return (category != null) ? new CategoryDtoResponse(category.getId(), category.getDescription()) : null;
     }
 
-    private User mapStringToUser(String userId) {
-        if (userId != null) {
-            User user = userRepository.findById(UUID.fromString(userId)).orElse(null);
+    private User mapDtoToUser(UserDtoRequest userDto) {
+        if (userDto != null && userDto.getId() != null) {
+            User user = userRepository.findById(userDto.getId()).orElse(null);
             return user;
         }
         return null;
     }
 
-    private String mapUserIdToString(User user) {
-        return (user != null) ? user.getId().toString() : null;
+    private UserDtoResponse mapUserIdToDto(User user) {
+        return (user != null) ?
+                new UserDtoResponse(
+                user.getId(),
+                user.getName(),
+                user.getEmail(),
+                user.getUsername(),
+                user.getPassword())
+                : null;
     }
 }

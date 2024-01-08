@@ -1,5 +1,6 @@
 package com.finance.financecontrol.services;
 
+import com.finance.financecontrol.dtos.requests.CategoryDtoRequest;
 import com.finance.financecontrol.dtos.requests.TransactionDtoRequest;
 import com.finance.financecontrol.dtos.responses.TransactionDtoResponse;
 import com.finance.financecontrol.enums.ExpenseType;
@@ -62,7 +63,7 @@ public class TransactionService {
             }
 
             if (updatedData.getCategory() != null) {
-                Category category = mapStringToCategory(updatedData.getCategory());
+                Category category = mapDtoToCategory(updatedData.getCategory());
                 existingTransaction.setCategoryId(category);
             }
 
@@ -90,11 +91,11 @@ public class TransactionService {
         }
     }
 
-    private Category mapStringToCategory(String categoryId) {
-        if (categoryId != null) {
-            Long categoryIdLong = Long.parseLong(categoryId);
-            Category category = categoryRepository.findById(Math.toIntExact(categoryIdLong)).orElse(null);
-            return category;
+    private Category mapDtoToCategory(CategoryDtoRequest categoryDto) {
+        if (categoryDto != null) {
+            Long categoryId = categoryDto.getId();
+
+            return categoryRepository.findById(Math.toIntExact(categoryId)).orElse(null);
         }
         return null;
     }

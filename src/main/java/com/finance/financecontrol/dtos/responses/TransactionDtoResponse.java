@@ -12,11 +12,11 @@ public class TransactionDtoResponse {
 
     private UUID id;
 
-    private String userId;
+    private UserDtoResponse userId;
 
     private String transactionDescription;
 
-    private String category;
+    private CategoryDtoResponse category;
 
     private ExpenseType expenseType;
 
@@ -30,7 +30,7 @@ public class TransactionDtoResponse {
 
     private LocalDateTime updatedAt;
 
-    public TransactionDtoResponse(UUID id, String userId, String transactionDescription, String category, ExpenseType expenseType, LocalDateTime dueDate, BigDecimal amount, String comments, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public TransactionDtoResponse(UUID id, UserDtoResponse userId, String transactionDescription, CategoryDtoResponse category, ExpenseType expenseType, LocalDateTime dueDate, BigDecimal amount, String comments, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.userId = userId;
         this.transactionDescription = transactionDescription;
@@ -53,11 +53,11 @@ public class TransactionDtoResponse {
         this.id = id;
     }
 
-    public String getUserId() {
+    public UserDtoResponse getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(UserDtoResponse userId) {
         this.userId = userId;
     }
 
@@ -69,11 +69,11 @@ public class TransactionDtoResponse {
         this.transactionDescription = transactionDescription;
     }
 
-    public String getCategory() {
+    public CategoryDtoResponse getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(CategoryDtoResponse category) {
         this.category = category;
     }
 
