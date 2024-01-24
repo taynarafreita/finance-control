@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public class TransactionDtoRequest {
 
-    private UserDtoRequest userId;
+    private UserDtoRequest user;
 
     @NotNull(message = "is required")
     private String transactionDescription;
@@ -29,8 +29,8 @@ public class TransactionDtoRequest {
 
     public TransactionDtoRequest() {}
 
-    public TransactionDtoRequest(UserDtoRequest userId, String transactionDescription, CategoryDtoRequest category, ExpenseType expenseType, LocalDateTime dueDate, BigDecimal amount, String comments) {
-        this.userId = userId;
+    public TransactionDtoRequest(UserDtoRequest user, String transactionDescription, CategoryDtoRequest category, ExpenseType expenseType, LocalDateTime dueDate, BigDecimal amount, String comments) {
+        this.user = user;
         this.transactionDescription = transactionDescription;
         this.category = category;
         this.expenseType = expenseType;
@@ -39,12 +39,12 @@ public class TransactionDtoRequest {
         this.comments = comments;
     }
 
-    public UserDtoRequest getUserId() {
-        return userId;
+    public UserDtoRequest getUser() {
+        return user;
     }
 
-    public void setUserId(UserDtoRequest userId) {
-        this.userId = userId;
+    public void setUserId(UserDtoRequest user) {
+        this.user = user;
     }
 
     public String getTransactionDescription() {

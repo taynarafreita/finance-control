@@ -15,7 +15,7 @@ public class AccountBalance {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User userId;
+    private User user;
 
     @Column(name = "current_balance", nullable = false)
     private BigDecimal currentBalance;
@@ -45,12 +45,12 @@ public class AccountBalance {
         this.id = id;
     }
 
-    public User getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(User userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public BigDecimal getCurrentBalance() {
@@ -76,4 +76,5 @@ public class AccountBalance {
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
+
 }

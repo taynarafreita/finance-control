@@ -32,8 +32,8 @@ public class TransactionMapper {
         Transaction transaction = new Transaction();
         transaction.setId(UUID.randomUUID());
 
-        User user = mapDtoToUser(dto.getUserId());
-        transaction.setUserId(user);
+        User user = mapDtoToUser(dto.getUser());
+        transaction.setUser(user);
 
         transaction.setTransactionDescription(dto.getTransactionDescription());
 
@@ -51,7 +51,7 @@ public class TransactionMapper {
     public TransactionDtoResponse toResponseDTO(Transaction transaction) {
         return new TransactionDtoResponse(
                 transaction.getId(),
-                mapUserIdToDto(transaction.getUserId()),
+                mapUserIdToDto(transaction.getUser()),
                 transaction.getTransactionDescription(),
                 mapCategoryIdToDto(transaction.getCategoryId()),
                 transaction.getExpenseType(),

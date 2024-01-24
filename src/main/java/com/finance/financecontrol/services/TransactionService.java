@@ -6,15 +6,17 @@ import com.finance.financecontrol.dtos.responses.TransactionDtoResponse;
 import com.finance.financecontrol.enums.ExpenseType;
 import com.finance.financecontrol.exceptions.TransactionNotFoundException;
 import com.finance.financecontrol.mappers.TransactionMapper;
+import com.finance.financecontrol.models.AccountBalance;
 import com.finance.financecontrol.models.Category;
 import com.finance.financecontrol.models.Transaction;
+import com.finance.financecontrol.repositories.AccountBalanceRepository;
 import com.finance.financecontrol.repositories.CategoryRepository;
 import com.finance.financecontrol.repositories.TransactionRepository;
+import com.finance.financecontrol.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -23,19 +25,20 @@ import java.util.stream.Collectors;
 @Service
 public class TransactionService {
 
+    @Autowired
     private TransactionRepository transactionRepository;
+
+    @Autowired
     private TransactionMapper transactionMapper;
+
+    @Autowired
     private CategoryRepository categoryRepository;
 
     @Autowired
-    public TransactionService(TransactionRepository transactionRepository,
-                              TransactionMapper transactionMapper,
-                              CategoryRepository categoryRepository) {
+    private AccountBalanceRepository accountBalanceRepository;
 
-        this.transactionRepository = transactionRepository;
-        this.transactionMapper = transactionMapper;
-        this.categoryRepository = categoryRepository;
-    }
+    @Autowired
+    private UserRepository userRepository;
 
     public List<TransactionDtoResponse> getAllTransactions() {
         List<Transaction> transactions = transactionRepository.findAll();
@@ -46,6 +49,8 @@ public class TransactionService {
     public TransactionDtoResponse createTransaction(TransactionDtoRequest transactionDto) {
         Transaction newTransaction = transactionMapper.toEntity(transactionDto);
         Transaction addedTransaction = transactionRepository.save(newTransaction);
+
+        updateAccountBalance(newTransaction.getUser().getId());
 
         return transactionMapper.toResponseDTO(addedTransaction);
     }
@@ -85,6 +90,10 @@ public class TransactionService {
 
             Transaction updatedTransaction = transactionRepository.save(existingTransaction);
 
+            if (updatedData.getAmount() != null || updatedData.getExpenseType() != null) {
+                updateAccountBalance(updatedTransaction.getUser().getId());
+            }
+
             return transactionMapper.toResponseDTO(updatedTransaction);
         } else {
             throw new TransactionNotFoundException("Transação não encontrada com o ID: " + transactionId);
@@ -101,11 +110,47 @@ public class TransactionService {
     }
 
     public void deleteTransaction(UUID transactionId) {
-        if (transactionRepository.existsById(transactionId)) {
+        Transaction transaction = transactionRepository.findById(transactionId).orElse(null);
+
+        if (transaction != null) {
+            BigDecimal transactionAmount = transaction.getAmount();
+            transactionAmount = BigDecimal.ZERO;
+
+            transaction.setAmount(transactionAmount);
+
+            updateAccountBalance(transaction.getUser().getId());
+
             transactionRepository.deleteById(transactionId);
         } else {
             throw new TransactionNotFoundException("Transação não encontrada com o ID: " + transactionId);
         }
+    }
+
+    private void updateAccountBalance(UUID userId) {
+        BigDecimal newBalance = calculateNewBalance(userId);
+
+        AccountBalance accountBalance = new AccountBalance();
+        accountBalance.setUser(userRepository.findById(userId).orElse(null));
+        accountBalance.setCurrentBalance(newBalance);
+
+        accountBalanceRepository.save(accountBalance);
+    }
+
+    private BigDecimal calculateNewBalance(UUID userId) {
+        List<Transaction> userTransactions = transactionRepository.findByUserId(userId);
+
+        BigDecimal totalIncome = BigDecimal.ZERO;
+        BigDecimal totalExpense = BigDecimal.ZERO;
+
+        for (Transaction transaction : userTransactions) {
+            if (ExpenseType.INCOME.equals(transaction.getExpenseType())) {
+                totalIncome = totalIncome.add(transaction.getAmount());
+            } else if (ExpenseType.EXPENSE.equals(transaction.getExpenseType())) {
+                totalExpense = totalExpense.add(transaction.getAmount());
+            }
+        }
+
+        return totalIncome.subtract(totalExpense);
     }
 
 }
