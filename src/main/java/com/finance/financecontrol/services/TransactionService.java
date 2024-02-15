@@ -46,6 +46,12 @@ public class TransactionService {
                 .collect(Collectors.toList());
     }
 
+    public TransactionDtoResponse getTransactionById(UUID transactionId) {
+        Transaction transaction = transactionRepository.findById(transactionId).orElseThrow(() -> new TransactionNotFoundException("Transação com id " + transactionId + " não encontrada."));
+
+        return transactionMapper.toResponseDTO(transaction);
+    }
+
     public TransactionDtoResponse createTransaction(TransactionDtoRequest transactionDto) {
         Transaction newTransaction = transactionMapper.toEntity(transactionDto);
         Transaction addedTransaction = transactionRepository.save(newTransaction);
@@ -113,7 +119,7 @@ public class TransactionService {
         Transaction transaction = transactionRepository.findById(transactionId).orElse(null);
 
         if (transaction != null) {
-            BigDecimal transactionAmount = transaction.getAmount();
+            BigDecimal transactionAmount;
             transactionAmount = BigDecimal.ZERO;
 
             transaction.setAmount(transactionAmount);

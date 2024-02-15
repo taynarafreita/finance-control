@@ -4,16 +4,13 @@ import com.finance.financecontrol.dtos.requests.TransactionDtoRequest;
 import com.finance.financecontrol.dtos.responses.TransactionDtoResponse;
 import com.finance.financecontrol.exceptions.TransactionNotFoundException;
 import com.finance.financecontrol.services.TransactionService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/transactions")
@@ -26,6 +23,11 @@ public class TransactionController {
     public List<TransactionDtoResponse> getAllTransactions() {
 
         return transactionService.getAllTransactions();
+    }
+
+    @GetMapping("/{transactionId}")
+    public TransactionDtoResponse getTransactionById(@PathVariable UUID transactionId) {
+        return transactionService.getTransactionById(transactionId);
     }
 
     @PostMapping("/create")
