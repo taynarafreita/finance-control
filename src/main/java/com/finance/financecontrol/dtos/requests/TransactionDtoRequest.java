@@ -1,24 +1,27 @@
 package com.finance.financecontrol.dtos.requests;
 
-import com.finance.financecontrol.enums.ExpenseType;
+import com.finance.financecontrol.annotations.ValidExpenseTypeEnum;
+import com.finance.financecontrol.enums.ExpenseTypeEnum;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 public class TransactionDtoRequest {
 
     private UserDtoRequest user;
 
     @NotNull(message = "is required")
+    @Size(max = 250, message = "must have a maximum of 250 characters")
     private String transactionDescription;
 
     @NotNull(message = "is required")
     private CategoryDtoRequest category;
 
     @NotNull(message = "is required")
-    private ExpenseType expenseType;
+    @ValidExpenseTypeEnum(message = "must be a ExpenseTypeEnum")
+    private ExpenseTypeEnum expenseType;
 
     private LocalDateTime dueDate;
 
@@ -29,7 +32,7 @@ public class TransactionDtoRequest {
 
     public TransactionDtoRequest() {}
 
-    public TransactionDtoRequest(UserDtoRequest user, String transactionDescription, CategoryDtoRequest category, ExpenseType expenseType, LocalDateTime dueDate, BigDecimal amount, String comments) {
+    public TransactionDtoRequest(UserDtoRequest user, String transactionDescription, CategoryDtoRequest category, ExpenseTypeEnum expenseType, LocalDateTime dueDate, BigDecimal amount, String comments) {
         this.user = user;
         this.transactionDescription = transactionDescription;
         this.category = category;
@@ -63,11 +66,11 @@ public class TransactionDtoRequest {
         this.category = category;
     }
 
-    public ExpenseType getExpenseType() {
+    public ExpenseTypeEnum getExpenseType() {
         return expenseType;
     }
 
-    public void setExpenseType(ExpenseType expenseType) {
+    public void setExpenseType(ExpenseTypeEnum expenseType) {
         this.expenseType = expenseType;
     }
 

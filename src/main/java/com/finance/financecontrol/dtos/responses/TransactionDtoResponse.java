@@ -1,11 +1,9 @@
 package com.finance.financecontrol.dtos.responses;
 
-import com.finance.financecontrol.enums.ExpenseType;
-import jakarta.validation.constraints.NotNull;
+import com.finance.financecontrol.enums.ExpenseTypeEnum;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.UUID;
 
 public class TransactionDtoResponse {
@@ -18,7 +16,7 @@ public class TransactionDtoResponse {
 
     private CategoryDtoResponse category;
 
-    private ExpenseType expenseType;
+    private ExpenseTypeEnum expenseType;
 
     private LocalDateTime dueDate;
 
@@ -30,7 +28,7 @@ public class TransactionDtoResponse {
 
     private LocalDateTime updatedAt;
 
-    public TransactionDtoResponse(UUID id, UserDtoResponse user, String transactionDescription, CategoryDtoResponse category, ExpenseType expenseType, LocalDateTime dueDate, BigDecimal amount, String comments, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public TransactionDtoResponse(UUID id, UserDtoResponse user, String transactionDescription, CategoryDtoResponse category, ExpenseTypeEnum expenseType, LocalDateTime dueDate, BigDecimal amount, String comments, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.user = user;
         this.transactionDescription = transactionDescription;
@@ -77,11 +75,11 @@ public class TransactionDtoResponse {
         this.category = category;
     }
 
-    public ExpenseType getExpenseType() {
+    public ExpenseTypeEnum getExpenseType() {
         return expenseType;
     }
 
-    public void setExpenseType(ExpenseType expenseType) {
+    public void setExpenseType(ExpenseTypeEnum expenseType) {
         this.expenseType = expenseType;
     }
 

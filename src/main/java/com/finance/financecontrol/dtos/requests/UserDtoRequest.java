@@ -1,10 +1,7 @@
 package com.finance.financecontrol.dtos.requests;
 
-import com.finance.financecontrol.enums.ExpenseType;
 import jakarta.validation.constraints.NotNull;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class UserDtoRequest {

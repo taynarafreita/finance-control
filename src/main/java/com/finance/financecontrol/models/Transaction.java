@@ -1,6 +1,6 @@
 package com.finance.financecontrol.models;
 
-import com.finance.financecontrol.enums.ExpenseType;
+import com.finance.financecontrol.enums.ExpenseTypeEnum;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -26,7 +26,7 @@ public class Transaction {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "expense_type", nullable = false)
-    private ExpenseType expenseType;
+    private ExpenseTypeEnum expenseType;
 
     @Column(name = "due_date")
     private LocalDateTime dueDate;
@@ -85,11 +85,11 @@ public class Transaction {
         this.categoryId = categoryId;
     }
 
-    public ExpenseType getExpenseType() {
+    public ExpenseTypeEnum getExpenseType() {
         return expenseType;
     }
 
-    public void setExpenseType(ExpenseType expenseType) {
+    public void setExpenseType(ExpenseTypeEnum expenseType) {
         this.expenseType = expenseType;
     }
 

@@ -3,8 +3,8 @@ package com.finance.financecontrol.services;
 import com.finance.financecontrol.dtos.requests.CategoryDtoRequest;
 import com.finance.financecontrol.dtos.requests.TransactionDtoRequest;
 import com.finance.financecontrol.dtos.responses.TransactionDtoResponse;
-import com.finance.financecontrol.enums.ExpenseType;
-import com.finance.financecontrol.exceptions.TransactionNotFoundException;
+import com.finance.financecontrol.enums.ExpenseTypeEnum;
+import com.finance.financecontrol.exceptions.http.TransactionNotFoundException;
 import com.finance.financecontrol.mappers.TransactionMapper;
 import com.finance.financecontrol.models.AccountBalance;
 import com.finance.financecontrol.models.Category;
@@ -149,9 +149,9 @@ public class TransactionService {
         BigDecimal totalExpense = BigDecimal.ZERO;
 
         for (Transaction transaction : userTransactions) {
-            if (ExpenseType.INCOME.equals(transaction.getExpenseType())) {
+            if (ExpenseTypeEnum.INCOME.equals(transaction.getExpenseType())) {
                 totalIncome = totalIncome.add(transaction.getAmount());
-            } else if (ExpenseType.EXPENSE.equals(transaction.getExpenseType())) {
+            } else if (ExpenseTypeEnum.EXPENSE.equals(transaction.getExpenseType())) {
                 totalExpense = totalExpense.add(transaction.getAmount());
             }
         }

@@ -2,8 +2,9 @@ package com.finance.financecontrol.controllers;
 
 import com.finance.financecontrol.dtos.requests.TransactionDtoRequest;
 import com.finance.financecontrol.dtos.responses.TransactionDtoResponse;
-import com.finance.financecontrol.exceptions.TransactionNotFoundException;
+import com.finance.financecontrol.exceptions.http.TransactionNotFoundException;
 import com.finance.financecontrol.services.TransactionService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,12 +27,12 @@ public class TransactionController {
     }
 
     @GetMapping("/{transactionId}")
-    public TransactionDtoResponse getTransactionById(@PathVariable UUID transactionId) {
+    public TransactionDtoResponse getTransactionById(@Valid @PathVariable UUID transactionId) {
         return transactionService.getTransactionById(transactionId);
     }
 
     @PostMapping("/create")
-    public ResponseEntity<TransactionDtoResponse> createTransaction(
+    public ResponseEntity<TransactionDtoResponse> createTransaction(@Valid
             @RequestBody TransactionDtoRequest requestDTO) {
 
         TransactionDtoResponse responseDTO = transactionService.createTransaction(requestDTO);
@@ -40,7 +41,7 @@ public class TransactionController {
     }
 
     @PutMapping("/update/{transactionId}")
-    public ResponseEntity<TransactionDtoResponse> updateTransaction(
+    public ResponseEntity<TransactionDtoResponse> updateTransaction(@Valid
             @PathVariable UUID transactionId,
             @RequestBody TransactionDtoRequest updatedData) {
 
@@ -54,7 +55,7 @@ public class TransactionController {
     }
 
     @DeleteMapping("/delete/{transactionId}")
-    public ResponseEntity<Void> deleteTransaction(@PathVariable UUID transactionId) {
+    public ResponseEntity<Void> deleteTransaction(@Valid @PathVariable UUID transactionId) {
         try {
             transactionService.deleteTransaction(transactionId);
 
